@@ -44,9 +44,9 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 	$order = wc_get_order($order_id);
 
 	$fisc = (object) [
-		'external_id' => ,
+		'external_id' => '',
 		'trans_id' => $order->get_transaction_id(),
-		'timestamp' => ,
+		'timestamp' => '',
 		'date_complete' => $order->get_date_paid(),
 		'receipt' => (object) [
 			'client' => (object) [
