@@ -44,7 +44,7 @@ add_action( 'woocommerce_thankyou', 'test_mts_postback' );
 
 function test_mts_postback( $order_id ) {
 	$url = 'https://ptsv2.com/t/x95pn-1563710775/post';
-	$order = wc_get_oreder( $order_id );
+	$order = wc_get_order( $order_id );
 	$args = array(
 		'headers' => array('Content-Type' => 'application/json; charset=utf-8'),
 		'body' => json_encode( $order ),
