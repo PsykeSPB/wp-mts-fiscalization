@@ -40,17 +40,17 @@ SOFTWARE.
 
 defined('ABSPATH') or die('not allowed');
 
-add_action( 'before_woocommerce_pay', 'test_before_mts_postback' );
+add_action( 'woocommerce_payment_complete', 'test_mts_postback' );
 
-function test_before_mts_postback() {
+function test_mts_postback( $order_id ) {
 	$url = 'https://ptsv2.com/t/x95pn-1563710775/post';
 	$args = array(
 		'timeout' => 45,
 		'redirection' => 5,
 		'http_version' => '1.0',
 		'blocking' => false,
-		'headers' => array(),
-		'body' => array( 'test' => 'before_woocommerce_pay' ),
+		'headers' => array( 'content-type' => 'application/json' ),
+		'body' => json_encode( wc_get_order( $order_id ) ),
 	);
 	$response = wp_remote_post( $url, $args );
 
