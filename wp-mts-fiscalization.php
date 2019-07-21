@@ -54,12 +54,13 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 			],
 		],
 		'company' => (object) [
-			'email' => '79219417383@litebox.ru',
-			'inn' => '782000336124',
-			'sno' => 'usn_income',
-			'payment_address' => 'https://shopping.ru',
+			'email' => '79219417383@litebox.ru', // Var from DB
+			'inn' => '782000336124', // Var from DB
+			'sno' => 'usn_income', // Система налогообложения. Возможные значения: «osn» – общая СН; «usn_income» – упрощенная СН (доходы); «usn_income_outcome» – упрощенная СН (доходы минус расходы); «envd» – единый налог на вмененный доход; «esn» – единый сельскохозяйственный налог; «patent» – патентная СН.
+			'payment_address' => '194291, РОССИЯ, 78, Санкт-Петербург, Культуры, 6, корп. 1', // Var from DB
 		],
 		'items' => [],
+		'items_pre' => $order->get_items(),
 		'payments' => [
 			(object) [
 				'type' => 1,
@@ -69,7 +70,7 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 		'total' => $order->get_total(),
 	];
 
-	return json_encode($fisc, true);
+	return $fisc;
 }
 
 add_action( 'woocommerce_order_status_completed', 'test_mts_postback' );
@@ -83,7 +84,7 @@ function test_mts_postback( $order_id ) {
 
 	$args = array(
 		'headers' => array('Content-Type' => 'application/json; charset=utf-8'),
-		'body' => $body,
+		'body' => json_encode( $body ),
 		'method' => 'POST',
 		'data_format' => 'body',
 	);
