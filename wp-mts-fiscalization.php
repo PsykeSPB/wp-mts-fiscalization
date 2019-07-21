@@ -42,7 +42,34 @@ defined('ABSPATH') or die('not allowed');
 
 function mts_prepare_fiscalization_package_from_order( $order_id ) {
 	$order = wc_get_order($order_id);
-	return json_encode($order, true);
+
+	$fisc = (object) [
+		'external_id' => ,
+		'trans_id' => $order->get_transaction_id(),
+		'timestamp' => ,
+		'date_complete' => $order->get_date_paid(),
+		'receipt' => (object) [
+			'client' => (object) [
+				'email' => $order->get_billing_email(),
+			],
+		],
+		'company' => (object) [
+			'email' => '79219417383@litebox.ru',
+			'inn' => '782000336124',
+			'sno' => 'usn_income',
+			'payment_address' => 'https://shopping.ru',
+		],
+		'items' => [],
+		'payments' => [
+			(object) [
+				'type' => 1,
+				'sum' => $order->get_total(),
+			],
+		],
+		'total' => $order->get_total(),
+	];
+
+	return json_encode($fisc, true);
 }
 
 add_action( 'woocommerce_order_status_completed', 'test_mts_postback' );
