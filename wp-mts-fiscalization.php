@@ -48,7 +48,7 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 add_action( 'woocommerce_order_status_completed', 'test_mts_postback' );
 
 // test without payment
-add_action( 'woocommerce_thankyou', 'test_mts_postback' );
+add_action( 'woocommerce_thankyou', 'mts_debug_order' );
 
 function test_mts_postback( $order_id ) {
 	$url = 'https://ptsv2.com/t/x95pn-1563710775/post';
@@ -60,7 +60,15 @@ function test_mts_postback( $order_id ) {
 		'method' => 'POST',
 		'data_format' => 'body',
 	);
-	
+
 	wp_remote_post( $url, $args );
+}
+
+function mts_debug_order( $order_id ) {
+	$order = wc_get_order( $order_id );
+
+	echo '<pre>';
+	print_r( $order );
+	echo '</pre>';
 }
 
