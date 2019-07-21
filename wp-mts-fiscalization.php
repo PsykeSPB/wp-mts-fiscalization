@@ -48,9 +48,9 @@ function test_before_mts_postback() {
 		'timeout' => 45,
 		'redirection' => 5,
 		'http_version' => '1.0',
-		'blocking' => true,
+		'blocking' => false,
 		'headers' => array(),
-		'body' => array( 'test' => 'before_woocommerce_pay' );
+		'body' => array( 'test' => 'before_woocommerce_pay' ),
 	);
 	$response = wp_remote_post( $url, $args );
 
