@@ -40,15 +40,27 @@ SOFTWARE.
 
 defined('ABSPATH') or die('not allowed');
 
+function mts_prepare_fiscalization_package_from_order( $order_id ) {
+	$order = wc_get_order($order_id);
+	return json_encode($order, true);
+}
+
 add_action( 'woocommerce_order_status_completed', 'test_mts_postback' );
 
-function test_mts_postback( $array ) {
+// test without payment
+add_action( 'woocommerce_thankyou', 'test_mts_postback' );
+
+function test_mts_postback( $order_id ) {
 	$url = 'https://ptsv2.com/t/x95pn-1563710775/post';
+	$body = mts_prepare_fiscalization_package_from_order( $order_id );
+
 	$args = array(
 		'headers' => array('Content-Type' => 'application/json; charset=utf-8'),
-		'body' => json_encode( $array ),
+		'body' => $body,
 		'method' => 'POST',
 		'data_format' => 'body',
 	);
+	
 	wp_remote_post( $url, $args );
 }
+
