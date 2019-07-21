@@ -65,11 +65,9 @@ function test_mts_postback( $order_id ) {
 }
 
 function mts_debug_order( $order_id ) {
-	$order = wc_get_order( $order_id );
-
 	echo 'Order info:';
 	echo '<pre>';
-	print_r( $order );
+	print_r( mts_prepare_fiscalization_package_from_order( $order_id ) );
 	echo '</pre>';
 }
 
