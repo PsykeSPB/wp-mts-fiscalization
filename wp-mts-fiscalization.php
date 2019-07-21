@@ -54,12 +54,10 @@ function test_before_mts_postback() {
 	);
 	$response = wp_remote_post( $url, $args );
 
-	// if( is_wp_error( $response ) ) {
-	// 	$error_message = $response->get_error_message();
-	// 	echo "Something gone wrong: $error_message";
-	// } else {
-	// 	echo "postback send: $response";
-	// }
-
-	echo $response;
+	if( is_wp_error( $response ) ) {
+		$error_message = $response->get_error_message();
+		echo "Something gone wrong: $error_message";
+	} else {
+		echo "postback send: $response";
+	}
 }
