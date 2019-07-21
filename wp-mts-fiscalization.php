@@ -70,7 +70,7 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 	];
 
 	foreach ($order->get_items() as $item) {
-		array_push( $fisc['items_pre'], $item);
+		array_push( $fisc->items_pre, $item);
 	}
 
 	return $fisc;
