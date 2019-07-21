@@ -58,6 +58,8 @@ function test_before_mts_postback() {
 		$error_message = $response->get_error_message();
 		echo "Something gone wrong: $error_message";
 	} else {
-		echo "postback send: $response";
+		echo '<pre>';
+		print_r($response);
+		echo '</pre>';
 	}
 }
