@@ -70,7 +70,19 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 	];
 
 	foreach ($order->get_items() as $item_id => $item_data) {
-		array_push( $fisc->items, $item);
+		array_push( $fisc->items, (object) [
+			'name' => $item_data->get_name(),
+			'price' => $item_data->get_total() / $item_data->get_quantity(),
+			'quantity' => $item_data->get_quantity(),
+			'sum' => $item_data->get_total(),
+			'measurement_unit' => 'шт',
+			'payment_method' => 'full_prepayment',
+			'payment_object' => 'service',
+			'vat' => (object) [
+				'type' => $item_data->get_tax_class(), // Get from item and reformat
+				'sum' => $item_data->get_total_tax(), // Can get from item?
+			],
+		]);
 	}
 
 	return $fisc;
