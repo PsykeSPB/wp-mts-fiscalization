@@ -2,16 +2,17 @@
 /**
  * @package wp-mts-fiscalization
  */
+
 /*
 Plugin Name: MTS Fiscalization
 Plugin URI: https://github.com/PsykeSPB/wp-mts-fiscalization
 Description: WordPress plugin for check fiscalization with MTS cashbox
 Version: 1.0.0
 Author: Vitaly "PsykeSPB" Tikhoplav
-Author URL: psykespb.com
+Author URL: http://cv.psykespb.com
 License: MIT
 Text Domain: wp-mts-fiscalization
- */
+*/
 
 /*
 MIT License
@@ -36,3 +37,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+defined('ABSPATH') or die('not allowed');
+
+add_action( 'before_woocommerce_pay', 'test_mts_postback' );
+
+function test_mts_postback() {
+	wp_remote_post( 'https://ptsv2.com/t/x95pn-1563710775/post', array(
+		'body' => 'ThisIsTheTestFromWooCommerce',
+	));
+}
