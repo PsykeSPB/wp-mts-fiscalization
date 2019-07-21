@@ -40,25 +40,15 @@ SOFTWARE.
 
 defined('ABSPATH') or die('not allowed');
 
-add_action( 'woocommerce_thankyou', 'test_mts_postback' );
+add_action( 'woocommerce_order_status_completed', 'test_mts_postback' );
 
-function test_mts_postback( $order_id ) {
+function test_mts_postback( $array ) {
 	$url = 'https://ptsv2.com/t/x95pn-1563710775/post';
-	$order = wc_get_order( $order_id );
 	$args = array(
 		'headers' => array('Content-Type' => 'application/json; charset=utf-8'),
-		'body' => json_encode( $order ),
+		'body' => json_encode( $array ),
 		'method' => 'POST',
 		'data_format' => 'body',
 	);
-	$response = wp_remote_post( $url, $args );
-
-	if( is_wp_error( $response ) ) {
-		$error_message = $response->get_error_message();
-		echo "Something gone wrong: $error_message";
-	} else {
-		echo '<pre>';
-		print_r($response);
-		echo '</pre>';
-	}
+	wp_remote_post( $url, $args );
 }
