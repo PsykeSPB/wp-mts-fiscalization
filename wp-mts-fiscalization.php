@@ -40,10 +40,16 @@ SOFTWARE.
 
 defined('ABSPATH') or die('not allowed');
 
-add_action( 'before_woocommerce_pay', 'test_mts_postback' );
-
-function test_mts_postback() {
+add_action( 'before_woocommerce_pay', 'test_before_mts_postback' );
+function test_before_mts_postback() {
 	wp_remote_post( 'https://ptsv2.com/t/x95pn-1563710775/post', array(
-		'body' => 'ThisIsTheTestFromWooCommerce',
+		'body' => 'test=before_woocommerce_pay',
+	));
+}
+
+add_action( 'before_woocommerce_pay', 'test_after_mts_postback' );
+function test_after_mts_postback() {
+	wp_remote_post( 'https://ptsv2.com/t/x95pn-1563710775/post', array(
+		'body' => 'test=after_woocommerce_pay',
 	));
 }
