@@ -44,8 +44,7 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 	$order = wc_get_order($order_id);
 
 	$fisc = (object) [
-		'external_id' => '17052917561851307',
-		'external_od' => '1705292' . $order->get_date_paid()->getTimestamp(),
+		'external_id' => '1705292' . $order->get_date_paid()->getTimestamp(),
 		'timestamp' => $order->get_date_paid()->format('Y.m.d H:i:s'),
 		'receipt' => (object) [
 			'client' => (object) [
@@ -63,10 +62,10 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 		'payments' => [
 			(object) [
 				'type' => 1,
-				'sum' => $order->get_total(),
+				'sum' => floatval( $order->get_total() ),
 			],
 		],
-		'total' => $order->get_total(),
+		'total' => floatval( $order->get_total() ),
 	];
 
 	foreach ($order->get_items() as $item_id => $item_data) {
@@ -74,7 +73,7 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 			'name' => $item_data->get_name(),
 			'price' => $item_data->get_total() / $item_data->get_quantity(),
 			'quantity' => $item_data->get_quantity(),
-			'sum' => $item_data->get_total(),
+			'sum' => floatval( $item_data->get_total() ),
 			'measurement_unit' => 'шт',
 			'payment_method' => 'full_prepayment',
 			'payment_object' => 'service',
@@ -82,6 +81,7 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 				'type' => $item_data->get_tax_class(), // Get from item and reformat
 				'sum' => $item_data->get_total_tax(), // Can get from item?
 			],
+			'prod' => $item_data->get_product(),
 		]);
 	}
 
