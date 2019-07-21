@@ -45,8 +45,8 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 
 	$fisc = (object) [
 		'external_id' => '17052917561851307',
-		'external_od' => $order->get_date_paid()->getTimestamp(),
-		'timestamp' => $order->get_date_paid()->format('Y-m-d h:m:s'),
+		'external_od' => '1705291' . $order->get_date_paid()->getTimestamp(),
+		'timestamp' => $order->get_date_paid()->format('Y-m-d H:i:s'),
 		'date_complete' => $order->get_date_paid(),
 		'receipt' => (object) [
 			'client' => (object) [
@@ -60,7 +60,6 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 			'payment_address' => '194291, РОССИЯ, 78, Санкт-Петербург, Культуры, 6, корп. 1', // Var from DB
 		],
 		'items' => [],
-		'items_pre' => $order->get_items()->data,
 		'payments' => [
 			(object) [
 				'type' => 1,
@@ -69,6 +68,10 @@ function mts_prepare_fiscalization_package_from_order( $order_id ) {
 		],
 		'total' => $order->get_total(),
 	];
+
+	foreach ($order->get_items() as $item) {
+		array_push( $fisc['items_pre'], $item);
+	}
 
 	return $fisc;
 }
