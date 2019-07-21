@@ -40,26 +40,23 @@ SOFTWARE.
 
 defined('ABSPATH') or die('not allowed');
 
-add_action( 'woocommerce_before_checkout_form_cart_notices 	', 'test_before_checkout_postback');
-function test_before_checkout_postback() {
-	wp_remote_post( 'https://ptsv2.com/t/x95pn-1563710775/post', array(
-		'body' => 'test=before_checkout',
-	));
-	echo 'this is before checkout';
-};
-
 add_action( 'before_woocommerce_pay', 'test_before_mts_postback' );
 function test_before_mts_postback() {
-	// wp_remote_post( 'https://ptsv2.com/t/x95pn-1563710775/post', array(
-	// 	'body' => 'test=before_woocommerce_pay',
-	// ));
-	echo 'this is before woocommerce pay';
-}
+	$url = 'https://ptsv2.com/t/x95pn-1563710775/post';
+	$args = array(
+		'timeout' => 45,
+		'redirection' => 5,
+		'http_version' => '1.0',
+		'blocking' => true,
+		'headers' => array(),
+		'body' => array( 'test' => 'before_woocommerce_pay' );
+	);
+	$response = wp_remote_post( $url, $args );
 
-add_action( 'before_woocommerce_pay', 'test_after_mts_postback' );
-function test_after_mts_postback() {
-	// wp_remote_post( 'https://ptsv2.com/t/x95pn-1563710775/post', array(
-	// 	'body' => 'test=after_woocommerce_pay',
-	// ));
-	echo 'this is after woocommerce pay';
+	if( is_wp_error( $response ) ) {
+		$error_message = $response->get_error_message();
+		echo "Something gone wrong: $error_message";
+	} else {
+		echo "postback send: $response";
+	}
 }
