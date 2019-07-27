@@ -43,9 +43,9 @@ defined('ABSPATH') or die('not allowed');
 if(!class_exists('MTSFiscalization')) {
 
 	class MTSFiscalization {
-		protected static function getAPIEndpoint () {
-			return 'https://ptsv2.com/t/x95pn-1563710775/post';
-		}
+		const PLUGIN_NAME = 'MTS Fiscalization';
+		const PLUGIN_SLUG = 'mts_fisc_settings';
+		const API_ENDPOINT = 'https://ptsv2.com/t/x95pn-1563710775/post';
 
 		public static function register() {
 			// add event handlers to globall WP hooks
@@ -59,20 +59,31 @@ if(!class_exists('MTSFiscalization')) {
 
 			// Send order info to fiscalization api
 			add_action('woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
+
+			// Add actions to links in a plugin description
+			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array('MTSFiscalization', 'addActionLinks'));
 		}
 
 		public static function add_admin_menu() {
 			add_menu_page(
-				'MTS Fisc Plugin Settings',
-				'MTS Fisc',
+				MTSFiscalization::PLUGIN_NAME . ' settings',
+				MTSFiscalization::PLUGIN_NAME,
 				'manage_options',
-				'mts_fisc_settings',
+				MTSFiscalization::PLUGIN_SLUG,
 				function() {
 					require_once plugin_dir_path(__FILE__).'assets/admin.php';
 				},
 				'dashicons-admin-generic',
 				110
 			);
+		}
+
+		public static function addActionLinks($links) {
+			$mylinks = array(
+				'<a href="' . admin_url( 'options-general.php?page=' . MTSFiscalization::PLUGIN_SLUG ) . '">Settings</a>',
+			);
+
+			return array_merge( $links, $mylinks );
 		}
 
 		public static function debug_order($order_id) {
@@ -83,7 +94,7 @@ if(!class_exists('MTSFiscalization')) {
 		}
 
 		public static function send_postback($order_id) {
-			$url = MTSFiscalization::getAPIEndpoint();
+			$url = MTSFiscalization::API_ENDPOINT;
 			$body = MTSFiscalization::getPackageByOrderID($order_id);
 
 			$args = array(
