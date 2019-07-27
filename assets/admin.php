@@ -4,7 +4,7 @@
 		<?php 
 			settings_fields('mts_fiscalization'); 
 			do_settings_sections('mts_fiscalization')
-			submit_button('Сохранить');
+			submit_button();
 		?>
 	</form>
 </div>
