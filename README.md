@@ -42,7 +42,11 @@ ls | grep "wp-mts-fiscalization"
 
 ![image](https://user-images.githubusercontent.com/42450886/61997462-62cc5d00-b0aa-11e9-90a3-6db8defe9959.png)
 
+<br>
+
 Заполните все поля в соответствии с данными личного кабинета МТС и готово!
+
+![image](https://user-images.githubusercontent.com/42450886/61997539-8512aa80-b0ab-11e9-8a1e-04c3aab32c87.png)
 
 <br>
 
