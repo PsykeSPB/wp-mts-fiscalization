@@ -32,15 +32,6 @@
 			</tr>
 
 			<tr valign="top">
-				<th scope="row">Адресс:</th>
-				<td>
-					<input type="text" 
-						name="mts_fiscalization_address" 
-						value="<? echo esc_attr( get_option('mts_fiscalization_address') ); ?>" />
-				</td>
-			</tr>
-
-			<tr valign="top">
 				<th scope="row">Система Налогооблажения:</th>
 				<td>
 					<select name="mts_fiscalization_tax_system">
@@ -58,6 +49,15 @@
 				<th scope="row" colspan="100%">
 					<hr />
 				</th>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row">Идентификатор Магазина</th>
+				<td>
+					<input type="text" 
+						name="mts_fiscalization_shop_id"
+						value="<? echo get_option('mts_fiscalization_shop_id') ?>" />
+				</td>
 			</tr>
 
 			<tr valign="top">

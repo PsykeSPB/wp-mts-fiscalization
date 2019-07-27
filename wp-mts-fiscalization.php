@@ -46,7 +46,7 @@ if(!class_exists('MTSFiscalization')) {
 	define('PLUGIN_SLUG', 'mts_fisc_settings');
 	define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 
-	define('API_ENDPOINT', 'https://in.litebox.ru/fiscalization/v1/shops/43/sell');
+	define('API_ENDPOINT', 'https://in.litebox.ru/fiscalization/v1/shops/');
 	//define('API_ENDPOINT', 'https://ptsv2.com/t/x95pn-1563710775/post');
 
 	class MTSFiscalization {
@@ -82,8 +82,8 @@ if(!class_exists('MTSFiscalization')) {
 		public static function add_admin_settings() {
 			register_setting('mts_fiscalization', 'mts_fiscalization_email');
 			register_setting('mts_fiscalization', 'mts_fiscalization_inn');
-			register_setting('mts_fiscalization', 'mts_fiscalization_address');
 			register_setting('mts_fiscalization', 'mts_fiscalization_tax_system');
+			register_setting('mts_fiscalization', 'mts_fiscalization_shop_id');
 			register_setting('mts_fiscalization', 'mts_fiscalization_api_token');
 		}
 
@@ -107,15 +107,15 @@ if(!class_exists('MTSFiscalization')) {
 
 			$args = array(
 				'headers' => array(
-					'Content-Type' => 'application/json; charset=utf-8',
-					'Authorization' => 'token ' . get_option('mts_fiscalization_api_token'),
+					'Content-Type' => 'application/json',
+					'Authorization' => 'Token ' . get_option('mts_fiscalization_api_token'),
 				),
 				'body' => $body,
 				'method' => 'POST',
 				'data_format' => 'body',
 			);
 
-			$response = wp_remote_post( API_ENDPOINT, $args );
+			$response = wp_remote_post( API_ENDPOINT . get_option('mts_fiscalization_shop_id') . '/sell', $args );
 
 			echo 'Response:';
 			echo '<pre>';
@@ -148,7 +148,7 @@ if(!class_exists('MTSFiscalization')) {
 					'email' => get_option('mts_fiscalization_email'),
 					'inn' => get_option('mts_fiscalization_inn'),
 					'sno' => get_option('mts_fiscalization_tax_system'),
-					'payment_address' => get_option('mts_fiscalization_address'),
+					'payment_address' => home_url(),
 				],
 				'items' => [],
 				'payments' => [
