@@ -47,7 +47,6 @@ if(!class_exists('MTSFiscalization')) {
 	define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 	define('API_ENDPOINT', 'https://in.litebox.ru/fiscalization/v1/shops/');
-	//define('API_ENDPOINT', 'https://ptsv2.com/t/x95pn-1563710775/post');
 
 	class MTSFiscalization {
 		public static function register() {
@@ -62,7 +61,6 @@ if(!class_exists('MTSFiscalization')) {
 
 			// Send order info to fiscalization api
 			add_action('woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
-			add_action('woocommerce_thankyou', array('MTSFiscalization', 'send_postback'));
 		}
 
 		public static function add_admin_menu() {
@@ -100,11 +98,6 @@ if(!class_exists('MTSFiscalization')) {
 			$body = json_encode(MTSFiscalization::getPackagedOrder($order), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 			$body = preg_replace('/"(\d+)\.(\d{2})"/', '$1.$2', $body);
 
-			echo 'Request:';
-			echo '<pre>';
-			print_r($body);
-			echo '</pre>';
-
 			$args = array(
 				'headers' => array(
 					'Content-Type' => 'application/json',
@@ -116,11 +109,6 @@ if(!class_exists('MTSFiscalization')) {
 			);
 
 			$response = wp_remote_post( API_ENDPOINT . get_option('mts_fiscalization_shop_id') . '/sell', $args );
-
-			echo 'Response:';
-			echo '<pre>';
-			print_r($response);
-			echo '</pre>';
 
 			if(is_wp_error($response)) {
 				$error_message = $response->get_error_message();
