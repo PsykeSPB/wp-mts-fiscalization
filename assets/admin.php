@@ -3,8 +3,8 @@
 	<form method="post" action="options.php">
 		<?php 
 			settings_fields('mts_fiscalization'); 
-			do_settings_sections('mts_fiscalization')
-			submit_button();
+			do_settings_sections('mts_fiscalization');
+			submit_button('Сохранить');
 		?>
 	</form>
 </div>
