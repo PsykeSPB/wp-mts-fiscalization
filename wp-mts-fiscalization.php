@@ -147,10 +147,10 @@ if(!class_exists('MTSFiscalization')) {
 				'payments' => [
 					(object) [
 						'type' => 1,
-						'sum' => (float) number_format( $order->get_total(), 2 ),
+						'sum' => round($order->get_total(), 2),
 					],
 				],
-				'total' => (float) number_format( $order->get_total(), 2 ),
+				'total' => round($order->get_total(), 2),
 			];
 
 			foreach ($order->get_items() as $item_id => $item_data) {
