@@ -104,9 +104,9 @@ if(!class_exists('MTSFiscalization')) {
 					'Content-Type' => 'application/json; charset=utf-8',
 					'Authorization' => 'token ' . get_option('mts_fiscalization_api_token'),
 				),
-				'body' => json_encode( $body ),
+				'body' => json_encode($body, JSON_UNESCAPED_UNICODE),
 				'method' => 'POST',
-				'data_format' => json_encode('body'),
+				'data_format' => 'body',
 			);
 
 			$response = wp_remote_post( API_ENDPOINT, $args );
@@ -147,18 +147,18 @@ if(!class_exists('MTSFiscalization')) {
 				'payments' => [
 					(object) [
 						'type' => 1,
-						'sum' => floatval( $order->get_total() ),
+						'sum' => round( $order->get_total(), 2 ),
 					],
 				],
-				'total' => floatval( $order->get_total() ),
+				'total' => round( $order->get_total(), 2 ),
 			];
 
 			foreach ($order->get_items() as $item_id => $item_data) {
 				array_push( $fisc->items, (object) [
 					'name' => $item_data->get_name(),
-					'price' => $item_data->get_total() / $item_data->get_quantity(),
+					'price' => round($item_data->get_total() / $item_data->get_quantity(), 2),
 					'quantity' => $item_data->get_quantity(),
-					'sum' => floatval( $item_data->get_total() ),
+					'sum' => round( $item_data->get_total(), 2),
 					'measurement_unit' => 'шт',
 					'payment_method' => 'full_prepayment',
 					'payment_object' => 'service',
