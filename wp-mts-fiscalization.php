@@ -60,7 +60,7 @@ if(!class_exists('MTSFiscalization')) {
 
 			// Show order information on the thankyou page
 			// should be used only in dev
-			add_action('woocommerce_thankyou', array('MTSFiscalization', 'debug_order'));
+			add_action('woocommerce_thankyou', array('MTSFiscalization', 'send_postback'));
 
 			// Send order info to fiscalization api
 			add_action('woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
@@ -99,15 +99,9 @@ if(!class_exists('MTSFiscalization')) {
 			return array_merge($links, $plugin_links);
 		}
 
-		public static function debug_order($order_id) {
-			echo 'Order info:';
-			echo '<pre>';
-			print_r(wc_get_order($order_id));
-			echo '</pre>';
-		}
-
 		public static function send_postback($order_id) {
-			$body = MTSFiscalization::getPackageByOrderID($order_id);
+			$order = wc_get_order($order_id);
+			$body = MTSFiscalization::getPackageByOrderID($order);
 
 			$args = array(
 				'headers' => array(
@@ -119,12 +113,17 @@ if(!class_exists('MTSFiscalization')) {
 				'data_format' => 'body',
 			);
 
-			wp_remote_post( API_ENDPOINT, $args );
+			$response = wp_remote_post( API_ENDPOINT, $args );
+
+			if ( is_wp_error( $response ) ) {
+			   $error_message = $response->get_error_message();
+			   $order->add_order_note("Ошибка фискализации:\n$error_message");
+			} else {
+			   $order->add_order_note('Успешно фискализирован');
+			}
 		}
 
-		protected static function getPackageByOrderID($order_id) {
-			$order = wc_get_order($order_id);
-
+		protected static function getPackageByOrderID($order) {
 			$fisc = (object) [
 				'external_id' => '1705292' . $order->get_date_paid()->getTimestamp(),
 				'timestamp' => $order->get_date_paid()->format('Y.m.d H:i:s'),
