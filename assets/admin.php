@@ -4,6 +4,7 @@
 		<? settings_fields('mts_fiscalization'); ?>
 		<? do_settings_sections('mts_fiscalization'); ?>
 		<table class="form-table">
+			<h3>Данные организации</h3>
 			<tr valign="top">
 				<th scope="row">Email:</th>
 				<td>
@@ -43,6 +44,15 @@
 						<option value="esn" <? echo get_option('mts_fiscalization_tax_system') === 'esn' ? 'selected' : '' ?>>Единый сельскохозяйственный налог</option>
 						<option value="patent" <? echo get_option('mts_fiscalization_tax_system') === 'patent' ? 'selected' : '' ?>>Патентная СН</option>
 					</select>
+				</td>
+			</tr>
+			<hr>
+			<tr valign="top">
+				<th scope="row">API token</th>
+				<td>
+					<input type="text" 
+						name="mts_fiscalization_api_token"
+						value="mts_fiscalization_api_token" />
 				</td>
 			</tr>
 		</table>

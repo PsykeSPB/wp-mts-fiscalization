@@ -88,6 +88,7 @@ if(!class_exists('MTSFiscalization')) {
 			register_setting('mts_fiscalization', 'mts_fiscalization_inn');
 			register_setting('mts_fiscalization', 'mts_fiscalization_address');
 			register_setting('mts_fiscalization', 'mts_fiscalization_tax_system');
+			register_setting('mts_fiscalization', 'mts_fiscalization_api_token');
 		}
 
 		public static function addActionLinks($links) {
@@ -101,22 +102,24 @@ if(!class_exists('MTSFiscalization')) {
 		public static function debug_order($order_id) {
 			echo 'Order info:';
 			echo '<pre>';
-			print_r(MTSFiscalization::getPackageByOrderID($order_id));
+			print_r(wc_get_order($order_id));
 			echo '</pre>';
 		}
 
 		public static function send_postback($order_id) {
-			$url = API_ENDPOINT;
 			$body = MTSFiscalization::getPackageByOrderID($order_id);
 
 			$args = array(
-				'headers' => array('Content-Type' => 'application/json; charset=utf-8'),
+				'headers' => array(
+					'Content-Type' => 'application/json; charset=utf-8',
+					'Authorization' => 'token ' . get_option('mts_fiscalization_api_token');
+				),
 				'body' => json_encode( $body ),
 				'method' => 'POST',
 				'data_format' => 'body',
 			);
 
-			wp_remote_post( $url, $args );
+			wp_remote_post( API_ENDPOINT, $args );
 		}
 
 		protected static function getPackageByOrderID($order_id) {
