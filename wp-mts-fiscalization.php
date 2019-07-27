@@ -46,27 +46,21 @@ if(!class_exists('MTSFiscalization')) {
 	define('PLUGIN_SLUG', 'mts_fisc_settings');
 	define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 
-	define('API_ENDPOINT', 'https://ptsv2.com/t/x95pn-1563710775/post');
+	define('API_ENDPOINT', 'https://in.litebox.ru/fiscalization/v1/shops/43/sell');
 
 	class MTSFiscalization {
 		public static function register() {
-			// Add event handlers to globall WP hooks
-
 			// Add admin settings page for plugin
 			add_action('admin_menu', array('MTSFiscalization', 'add_admin_menu'));
 
 			// Add settings to admin page
 			add_action('admin_init', array('MTSFiscalization', 'add_admin_settings'));
 
-			// Show order information on the thankyou page
-			// should be used only in dev
-			add_action('woocommerce_thankyou', array('MTSFiscalization', 'send_postback'));
+			// Add actions to links in a plugin description
+			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array('MTSFiscalization', 'addActionLinks'));
 
 			// Send order info to fiscalization api
 			add_action('woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
-
-			// Add actions to links in a plugin description
-			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array('MTSFiscalization', 'addActionLinks'));
 		}
 
 		public static function add_admin_menu() {
@@ -101,7 +95,7 @@ if(!class_exists('MTSFiscalization')) {
 
 		public static function send_postback($order_id) {
 			$order = wc_get_order($order_id);
-			$body = MTSFiscalization::getPackageByOrderID($order);
+			$body = MTSFiscalization::getPackagedOrder($order);
 
 			$args = array(
 				'headers' => array(
@@ -123,7 +117,7 @@ if(!class_exists('MTSFiscalization')) {
 			}
 		}
 
-		protected static function getPackageByOrderID($order) {
+		protected static function getPackagedOrder($order) {
 			$fisc = (object) [
 				'external_id' => '1705292' . $order->get_date_paid()->getTimestamp(),
 				'timestamp' => $order->get_date_paid()->format('Y.m.d H:i:s'),
