@@ -52,7 +52,7 @@
 				<td>
 					<input type="text" 
 						name="mts_fiscalization_api_token"
-						value="mts_fiscalization_api_token" />
+						value="<? echo get_option('mts_fiscalization_api_token') ?>" />
 				</td>
 			</tr>
 		</table>
