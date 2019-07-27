@@ -137,7 +137,6 @@ if(!class_exists('MTSFiscalization')) {
 					'payment_address' => get_option('mts_fiscalization_address'),
 				],
 				'items' => [],
-				'items_pre' => $order->get_items(),
 				'payments' => [
 					(object) [
 						'type' => 1,
