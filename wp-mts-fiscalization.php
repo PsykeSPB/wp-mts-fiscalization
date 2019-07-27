@@ -84,11 +84,6 @@ if(!class_exists('MTSFiscalization')) {
 		}
 
 		public static function add_admin_settings() {
-			register_setting('mts_fiscalization', 'mts_fiscalization_email');
-			register_setting('mts_fiscalization', 'mts_fiscalization_inn');
-			register_setting('mts_fiscalization', 'mts_fiscalization_address');
-			register_setting('mts_fiscalization', 'mts_fiscalization_tax_system');
-
 			add_settings_section(
 				'mts_fiscalization_organization',
 				'Данные об организации',
@@ -99,20 +94,19 @@ if(!class_exists('MTSFiscalization')) {
 				},
 				PLUGIN_SLUG,
 			);
-
-			add_settings_field(
-				'mts_fiscalization_email',
-				'Email:',
-				function() {
+			
+			register_setting('mts_fiscalization', 'mts_fiscalization_inn');
+			register_setting('mts_fiscalization', 'mts_fiscalization_address');
+			register_setting('mts_fiscalization', 'mts_fiscalization_tax_system');
+			
+			register_setting('mts_fiscalization', 'mts_fiscalization_email');
+			add_settings_field('mts_fiscalization_email', 'Email:',	function() {
 					?><input type="email"
 						id="mts_fiscalization_email",
 						name="mts_fiscalization_email",
 						value="<? echo get_option('mts_fiscalization_email') ?>"
 					/><?
-				},
-				PLUGIN_SLUG,
-				'mts_fiscalization_organization'
-			);
+				}, PLUGIN_SLUG,	'mts_fiscalization_organization');
 		}
 
 		public static function addActionLinks($links) {
