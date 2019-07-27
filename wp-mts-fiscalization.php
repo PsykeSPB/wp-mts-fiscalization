@@ -86,9 +86,7 @@ if(!class_exists('MTSFiscalization')) {
 		public static function add_admin_settings() {
 			add_option('mts_fiscalization_organization_email', 'example@example.com');
 
-			register_setting('mts_fiscalization_options_organization', 'mts-mts_fiscalization_organization_email', function($input) {
-				return $input;
-			});
+			register_setting('mts_fiscalization_options_organization', 'mts-mts_fiscalization_organization_email');
 		}
 
 		public static function addActionLinks($links) {

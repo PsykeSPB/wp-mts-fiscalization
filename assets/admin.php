@@ -1,6 +1,6 @@
 <div class="wrap">
-	<h2>MTS Fiscalization Settings</h2>
-	<form method="POST" action="options.php">
+	<h2>MTS Fiscalization Настройки</h2>
+	<form method="post" action="options.php">
 		<?php settings_fields('mts_fiscalization_options_organization'); ?>
 		<h3>Данные организации:</h3>
 		<p>Заполняется в соответствии с данными из личном кабинета МТС.</p>
