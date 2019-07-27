@@ -112,7 +112,7 @@ if(!class_exists('MTSFiscalization')) {
 			$args = array(
 				'headers' => array(
 					'Content-Type' => 'application/json; charset=utf-8',
-					'Authorization' => 'token ' . get_option('mts_fiscalization_api_token');
+					'Authorization' => 'token ' . get_option('mts_fiscalization_api_token'),
 				),
 				'body' => json_encode( $body ),
 				'method' => 'POST',
