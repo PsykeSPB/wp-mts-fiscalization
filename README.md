@@ -56,7 +56,7 @@ ls | grep "wp-mts-fiscalization"
 
 При этом вы можете увидеть статус, или описание ошибки, в случае их возникновения в рамках каждого заказа (см. "Заказ заметки" справа)
 
-![image](https://user-images.githubusercontent.com/42450886/61997602-7aa4e080-b0ac-11e9-8060-02ff914f757b.png)
+![image](https://user-images.githubusercontent.com/42450886/61997632-eedf8400-b0ac-11e9-8e10-da7b3de9506d.png)
 
 <br>
 
