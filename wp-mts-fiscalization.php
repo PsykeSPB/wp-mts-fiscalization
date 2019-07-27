@@ -100,6 +100,11 @@ if(!class_exists('MTSFiscalization')) {
 			$body = json_encode(MTSFiscalization::getPackagedOrder($order), JSON_UNESCAPED_UNICODE);
 			$body = preg_replace('/\"(\d+).(\d{2})\"/g', '$1.$2', $body);
 
+			echo 'Request:';
+			echo '<pre>';
+			print_r($body);
+			echo '</pre>';
+
 			$args = array(
 				'headers' => array(
 					'Content-Type' => 'application/json; charset=utf-8',
@@ -112,6 +117,7 @@ if(!class_exists('MTSFiscalization')) {
 
 			$response = wp_remote_post( API_ENDPOINT, $args );
 
+			echo 'Response:';
 			echo '<pre>';
 			print_r($response);
 			echo '</pre>';
