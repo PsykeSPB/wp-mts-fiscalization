@@ -97,14 +97,15 @@ if(!class_exists('MTSFiscalization')) {
 
 		public static function send_postback($order_id) {
 			$order = wc_get_order($order_id);
-			$body = MTSFiscalization::getPackagedOrder($order);
+			$body = json_encode(MTSFiscalization::getPackagedOrder($order), JSON_UNESCAPED_UNICODE);
+			$body = preg_replace('/\"(\d+).(\d{2})\"/g', '$1.$2', $body);
 
 			$args = array(
 				'headers' => array(
 					'Content-Type' => 'application/json; charset=utf-8',
 					'Authorization' => 'token ' . get_option('mts_fiscalization_api_token'),
 				),
-				'body' => json_encode($body, JSON_UNESCAPED_UNICODE),
+				'body' => $body,
 				'method' => 'POST',
 				'data_format' => 'body',
 			);
@@ -147,18 +148,18 @@ if(!class_exists('MTSFiscalization')) {
 				'payments' => [
 					(object) [
 						'type' => 1,
-						'sum' => round($order->get_total(), 2),
+						'sum' => number_format($order->get_total(), 2),
 					],
 				],
-				'total' => round($order->get_total(), 2),
+				'total' => number_format($order->get_total(), 2),
 			];
 
 			foreach ($order->get_items() as $item_id => $item_data) {
 				array_push( $fisc->items, (object) [
 					'name' => $item_data->get_name(),
-					'price' => (float) number_format($item_data->get_total() / $item_data->get_quantity(), 2),
+					'price' => number_format($item_data->get_total() / $item_data->get_quantity(), 2),
 					'quantity' => $item_data->get_quantity(),
-					'sum' => (float) number_format( $item_data->get_total(), 2),
+					'sum' => number_format( $item_data->get_total(), 2),
 					'measurement_unit' => 'шт',
 					'payment_method' => 'full_prepayment',
 					'payment_object' => 'service',
