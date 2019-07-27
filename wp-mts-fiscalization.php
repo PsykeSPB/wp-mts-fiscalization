@@ -67,7 +67,9 @@ if(!class_exists('MTSFiscalization')) {
 				'MTS Fisc',
 				'manage_options',
 				'mts_fisc_settings',
-				array('MTSFiscalization', 'createAdminPage'),
+				function() {
+					return null;
+				},
 				'dashicons-admin-generic',
 				110
 			);
@@ -140,11 +142,7 @@ if(!class_exists('MTSFiscalization')) {
 			}
 
 			return $fisc;
-		}
-
-		protected static function createAdminPage() {
-
-		}
+		}		
 	}
 
 	// init plugin if its activated
