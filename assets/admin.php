@@ -16,9 +16,10 @@
 			<tr valign="top">
 				<th scope="row">ИНН:</th>
 				<td>
-					<input type="number" 
+					<input type="text" 
 						name="mts_fiscalization_inn" 
-						value="<? echo esc_attr( get_option('mts_fiscalization_inn') ); ?>" />
+						value="<? echo esc_attr( get_option('mts_fiscalization_inn') ); ?>" 
+						pattern="[0-9]{10}"/>
 				</td>
 			</tr>
 
@@ -30,11 +31,11 @@
 						value="<? echo esc_attr( get_option('mts_fiscalization_address') ); ?>" />
 				</td>
 			</tr>
-			
+
 			<tr valign="top">
-				<th scope="row">Адресс:</th>
+				<th scope="row">Система Налогооблажения:</th>
 				<td>
-					<select name="mts_fiscalization_address">
+					<select name="mts_fiscalization_tax_system">
 						<option value="osn"	<? echo get_option('mts_fiscalization_tax_system') === 'osn' ? 'selected' : '' ?>>Общая СН</option>
 						<option value="usn_income" <? echo get_option('mts_fiscalization_tax_system') === 'usn_income' ? 'selected' : '' ?>>Упрощенная СН (доходы)</option>
 						<option value="usn_income_outcome" <? echo get_option('mts_fiscalization_tax_system') === 'usn_income_outcome' ? 'selected' : '' ?>>Упрощенная СН (доходы минус расходы)</option>
