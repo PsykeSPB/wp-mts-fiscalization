@@ -58,14 +58,14 @@ if(!class_exists('MTSFiscalization')) {
 			add_action( 'woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
 		}
 
-		protected static function debug_order($order_id) {
+		public static function debug_order($order_id) {
 			echo 'Order info:';
 			echo '<pre>';
 			print_r(MTSFiscalization::getPackageByOrderID($order_id));
 			echo '</pre>';
 		}
 
-		protected static function send_postback($order_id) {
+		public static function send_postback($order_id) {
 			$url = MTSFiscalization::getAPIEndpoint();
 			$body = MTSFiscalization::getPackageByOrderID($order_id);
 
