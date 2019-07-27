@@ -4,7 +4,13 @@
 		<? settings_fields('mts_fiscalization'); ?>
 		<? do_settings_sections('mts_fiscalization'); ?>
 		<table class="form-table">
-			<h3>Данные организации</h3>
+			<tr valign="top">
+				<th scope="row" colspan="100%">
+					<h3>Данные организации</h3>
+					<hr />
+				</th>
+			</tr>
+
 			<tr valign="top">
 				<th scope="row">Email:</th>
 				<td>
@@ -46,7 +52,13 @@
 					</select>
 				</td>
 			</tr>
-			<hr/>
+
+			<tr valign="top">
+				<th scope="row" colspan="100%">
+					<hr />
+				</th>
+			</tr>
+
 			<tr valign="top">
 				<th scope="row">API token</th>
 				<td>
