@@ -68,7 +68,7 @@ if(!class_exists('MTSFiscalization')) {
 				'manage_options',
 				'mts_fisc_settings',
 				function() {
-					return null;
+					require_once plugin_dir_path(__FILE__).'assets/admin.php';
 				},
 				'dashicons-admin-generic',
 				110
