@@ -40,104 +40,106 @@ SOFTWARE.
 
 defined('ABSPATH') or die('not allowed');
 
-class MTSFiscPlugin {
-	function register() {
-		// add event handlers to globall WP hooks
+if(!class_exists('MTSFiscalization')) {
 
-		// show order information on the thankyou page
-		// should be used only in dev
-		add_action( 'woocommerce_thankyou', array($this, 'debug_order'));
-
-		// send order info to fiscalization api
-		add_action( 'woocommerce_order_status_completed', array($this, 'send_postback'));
-	}
-
-	function activate() {
-		// Reset read write rules and generate new for added custom posttypes
-		flush_rewrite_rules();
-	}
-
-	function deactivate() {
-		flush_rewrite_rules();
-	}
-
-	function debug_order($order_id) {
-		echo 'Order info:';
-		echo '<pre>';
-		print_r($this->getPackageByOrderID($order_id));
-		echo '</pre>';
-	}
-
-	function send_postback($order_id) {
-		$url = 'https://ptsv2.com/t/x95pn-1563710775/post';
-		$body = $this->getPackageByOrderID($order_id);
-
-		$args = array(
-			'headers' => array('Content-Type' => 'application/json; charset=utf-8'),
-			'body' => json_encode( $body ),
-			'method' => 'POST',
-			'data_format' => 'body',
-		);
-
-		wp_remote_post( $url, $args );
-	}
-
-	function getPackageByOrderID($order_id) {
-		$order = wc_get_order($order_id);
-
-		$fisc = (object) [
-			'external_id' => '1705292' . $order->get_date_paid()->getTimestamp(),
-			'timestamp' => $order->get_date_paid()->format('Y.m.d H:i:s'),
-			'receipt' => (object) [
-				'client' => (object) [
-					'email' => $order->get_billing_email(),
-				],
-			],
-			'company' => (object) [
-				'email' => '79219417383@litebox.ru', // Var from DB
-				'inn' => '782000336124', // Var from DB
-				'sno' => 'usn_income', // Система налогообложения. Возможные значения: «osn» – общая СН; «usn_income» – упрощенная СН (доходы); «usn_income_outcome» – упрощенная СН (доходы минус расходы); «envd» – единый налог на вмененный доход; «esn» – единый сельскохозяйственный налог; «patent» – патентная СН.
-				'payment_address' => '194291, РОССИЯ, 78, Санкт-Петербург, Культуры, 6, корп. 1', // Var from DB
-			],
-			'items' => [],
-			'items_pre' => $order->get_items(),
-			'payments' => [
-				(object) [
-					'type' => 1,
-					'sum' => floatval( $order->get_total() ),
-				],
-			],
-			'total' => floatval( $order->get_total() ),
-		];
-
-		foreach ($order->get_items() as $item_id => $item_data) {
-			array_push( $fisc->items, (object) [
-				'name' => $item_data->get_name(),
-				'price' => $item_data->get_total() / $item_data->get_quantity(),
-				'quantity' => $item_data->get_quantity(),
-				'sum' => floatval( $item_data->get_total() ),
-				'measurement_unit' => 'шт',
-				'payment_method' => 'full_prepayment',
-				'payment_object' => 'service',
-				'vat' => (object) [
-					'type' => $item_data->get_tax_class(), // Get from item and reformat
-					'sum' => $item_data->get_total_tax(), // Can get from item?
-				],
-				'prod' => $item_data->get_product(),
-			]);
+	class MTSFiscalization {
+		protected static function getAPIEndpoint () {
+			return 'https://ptsv2.com/t/x95pn-1563710775/post';
 		}
 
-		return $fisc;
+		public static function register() {
+			// add event handlers to globall WP hooks
+
+			// show order information on the thankyou page
+			// should be used only in dev
+			add_action( 'woocommerce_thankyou', array('MTSFiscalization', 'debug_order'));
+
+			// send order info to fiscalization api
+			add_action( 'woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
+		}
+
+		protected static function debug_order($order_id) {
+			echo 'Order info:';
+			echo '<pre>';
+			print_r(MTSFiscalization::getPackageByOrderID($order_id));
+			echo '</pre>';
+		}
+
+		protected static function send_postback($order_id) {
+			$url = MTSFiscalization::getAPIEndpoint();
+			$body = MTSFiscalization::getPackageByOrderID($order_id);
+
+			$args = array(
+				'headers' => array('Content-Type' => 'application/json; charset=utf-8'),
+				'body' => json_encode( $body ),
+				'method' => 'POST',
+				'data_format' => 'body',
+			);
+
+			wp_remote_post( $url, $args );
+		}
+
+		protected static function getPackageByOrderID($order_id) {
+			$order = wc_get_order($order_id);
+
+			$fisc = (object) [
+				'external_id' => '1705292' . $order->get_date_paid()->getTimestamp(),
+				'timestamp' => $order->get_date_paid()->format('Y.m.d H:i:s'),
+				'receipt' => (object) [
+					'client' => (object) [
+						'email' => $order->get_billing_email(),
+					],
+				],
+				'company' => (object) [
+					'email' => '79219417383@litebox.ru', // Var from DB
+					'inn' => '782000336124', // Var from DB
+					'sno' => 'usn_income', // Система налогообложения. Возможные значения: «osn» – общая СН; «usn_income» – упрощенная СН (доходы); «usn_income_outcome» – упрощенная СН (доходы минус расходы); «envd» – единый налог на вмененный доход; «esn» – единый сельскохозяйственный налог; «patent» – патентная СН.
+					'payment_address' => '194291, РОССИЯ, 78, Санкт-Петербург, Культуры, 6, корп. 1', // Var from DB
+				],
+				'items' => [],
+				'items_pre' => $order->get_items(),
+				'payments' => [
+					(object) [
+						'type' => 1,
+						'sum' => floatval( $order->get_total() ),
+					],
+				],
+				'total' => floatval( $order->get_total() ),
+			];
+
+			foreach ($order->get_items() as $item_id => $item_data) {
+				array_push( $fisc->items, (object) [
+					'name' => $item_data->get_name(),
+					'price' => $item_data->get_total() / $item_data->get_quantity(),
+					'quantity' => $item_data->get_quantity(),
+					'sum' => floatval( $item_data->get_total() ),
+					'measurement_unit' => 'шт',
+					'payment_method' => 'full_prepayment',
+					'payment_object' => 'service',
+					'vat' => (object) [
+						'type' => $item_data->get_tax_class(), // Get from item and reformat
+						'sum' => $item_data->get_total_tax(), // Can get from item?
+					],
+					'prod' => $item_data->get_product(),
+				]);
+			}
+
+			return $fisc;
+		}
 	}
+
+	// init plugin if its activated
+	MTSFiscalization::register();
+
+	// activation
+	require_once plugin_dir_path(__FILE__).'includes/wp-mts-fiscalization-activate.php';
+	register_activation_hook(__FILE__, array('MTSFiscalizationActivate', 'activate'));
+
+	// deactivation
+	require_once plugin_dir_path(__FILE__).'includes/wp-mts-fiscalization-deactivate.php';
+	register_deactivation_hook(__FILE__, array('MTSFiscalizationDeactivate', 'deactivate'));
 }
 
-if(class_exists('MTSFiscPlugin')) {
-	$mtsfiscPlugin = new MTSFiscPlugin();
-	$mtsfiscPlugin->register();
-}
 
-// activation
-register_activation_hook(__FILE__, array('mtsfiscPlugin', 'activate'));
 
-// deactivation
-register_deactivation_hook(__FILE__, array('mtsfiscPlugin', 'deactivate'));
+
