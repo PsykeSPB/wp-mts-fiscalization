@@ -105,19 +105,25 @@ if(!class_exists('MTSFiscalization')) {
 				),
 				'body' => json_encode( $body ),
 				'method' => 'POST',
-				'data_format' => 'body',
+				'data_format' => json_encode('body'),
 			);
 
 			$response = wp_remote_post( API_ENDPOINT, $args );
 
-			if ( is_wp_error( $response ) ) {
-			   $error_message = $response->get_error_message();
-			   $order->add_order_note("Ошибка фискализации:\n$error_message");
+			echo '<pre>';
+			print_r($response);
+			echo '</pre>';
+
+			if(is_wp_error($response)) {
+				$error_message = $response->get_error_message();
+				$order->add_order_note("Ошибка фискализации:\n$error_message");
 			} else {
-			   $order->add_order_note('Успешно фискализирован');
-			   echo '<pre>';
-			   print_r($response);
-			   echo '</pre>';
+				if($response->response->code > 299) {
+					$error_message = $response->body;
+					$order->add_order_note("Ошибка фискализации:\n$error_message");
+				} else {
+					$order->add_order_note('Успешно фискализирован');
+				}
 			}
 		}
 
