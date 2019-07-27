@@ -46,7 +46,7 @@
 					</select>
 				</td>
 			</tr>
-			<hr>
+			<hr/>
 			<tr valign="top">
 				<th scope="row">API token</th>
 				<td>
