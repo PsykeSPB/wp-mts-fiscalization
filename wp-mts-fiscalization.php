@@ -143,21 +143,21 @@ if(!class_exists('MTSFiscalization')) {
 					'client' => (object) [
 						'email' => $order->get_billing_email(),
 					],
-				],
-				'company' => (object) [
-					'email' => get_option('mts_fiscalization_email'),
-					'inn' => get_option('mts_fiscalization_inn'),
-					'sno' => get_option('mts_fiscalization_tax_system'),
-					'payment_address' => home_url(),
-				],
-				'items' => [],
-				'payments' => [
-					(object) [
-						'type' => 1,
-						'sum' => number_format($order->get_total(), 2),
+					'company' => (object) [
+						'email' => get_option('mts_fiscalization_email'),
+						'inn' => get_option('mts_fiscalization_inn'),
+						'sno' => get_option('mts_fiscalization_tax_system'),
+						'payment_address' => home_url(),
 					],
+					'items' => [],
+					'payments' => [
+						(object) [
+							'type' => 1,
+							'sum' => number_format($order->get_total(), 2),
+						],
+					],
+					'total' => number_format($order->get_total(), 2),
 				],
-				'total' => number_format($order->get_total(), 2),
 			];
 
 			foreach ($order->get_items() as $item_id => $item_data) {
