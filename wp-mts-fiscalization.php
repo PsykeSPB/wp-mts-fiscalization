@@ -42,11 +42,12 @@ defined('ABSPATH') or die('not allowed');
 
 if(!class_exists('MTSFiscalization')) {
 
-	class MTSFiscalization {
-		const PLUGIN_NAME = 'MTS Fiscalization';
-		const PLUGIN_SLUG = 'mts_fisc_settings';
-		const API_ENDPOINT = 'https://ptsv2.com/t/x95pn-1563710775/post';
+	define('PLUGIN_NAME', 'MTS Fiscalization');
+	define('PLUGIN_SLUG', 'mts_fisc_settings');
+	define('PLUGIN_PATH', plugin_dir_path(__FILE__));
+	define('API_ENDPOINT', 'https://ptsv2.com/t/x95pn-1563710775/post');
 
+	class MTSFiscalization {
 		public static function register() {
 			// add event handlers to globall WP hooks
 
@@ -66,12 +67,12 @@ if(!class_exists('MTSFiscalization')) {
 
 		public static function add_admin_menu() {
 			add_menu_page(
-				MTSFiscalization::PLUGIN_NAME . ' settings',
-				MTSFiscalization::PLUGIN_NAME,
+				PLUGIN_NAME . ' settings',
+				PLUGIN_NAME,
 				'manage_options',
-				MTSFiscalization::PLUGIN_SLUG,
+				PLUGIN_SLUG,
 				function() {
-					require_once plugin_dir_path(__FILE__).'assets/admin.php';
+					require_once PLUGIN_PATH . 'assets/admin.php';
 				},
 				'dashicons-admin-generic',
 				110
@@ -79,11 +80,11 @@ if(!class_exists('MTSFiscalization')) {
 		}
 
 		public static function addActionLinks($links) {
-			$mylinks = array(
-				'<a href="' . admin_url( 'options-general.php?page=' . MTSFiscalization::PLUGIN_SLUG ) . '">Settings</a>',
+			$plugin_links = array(
+				'<a href="' . admin_url('options-general.php?page=' . PLUGIN_SLUG ) . '">Settings</a>',
 			);
 
-			return array_merge( $links, $mylinks );
+			return array_merge($links, $plugin_links);
 		}
 
 		public static function debug_order($order_id) {
@@ -94,7 +95,7 @@ if(!class_exists('MTSFiscalization')) {
 		}
 
 		public static function send_postback($order_id) {
-			$url = MTSFiscalization::API_ENDPOINT;
+			$url = API_ENDPOINT;
 			$body = MTSFiscalization::getPackageByOrderID($order_id);
 
 			$args = array(
@@ -160,11 +161,11 @@ if(!class_exists('MTSFiscalization')) {
 	MTSFiscalization::register();
 
 	// activation
-	require_once plugin_dir_path(__FILE__).'includes/wp-mts-fiscalization-activate.php';
+	require_once PLUGIN_PATH . 'includes/wp-mts-fiscalization-activate.php';
 	register_activation_hook(__FILE__, array('MTSFiscalizationActivate', 'activate'));
 
 	// deactivation
-	require_once plugin_dir_path(__FILE__).'includes/wp-mts-fiscalization-deactivate.php';
+	require_once PLUGIN_PATH . 'includes/wp-mts-fiscalization-deactivate.php';
 	register_deactivation_hook(__FILE__, array('MTSFiscalizationDeactivate', 'deactivate'));
 }
 
