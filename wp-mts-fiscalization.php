@@ -56,7 +56,7 @@ if(!class_exists('MTSFiscalization')) {
 			add_action('admin_menu', array('MTSFiscalization', 'add_admin_menu'));
 
 			// Add settings to admin page
-			add_action('admin_menu', array('MTSFiscalization', 'add_admin_settings'));
+			add_action('admin_init', array('MTSFiscalization', 'add_admin_settings'));
 
 			// Show order information on the thankyou page
 			// should be used only in dev
@@ -84,9 +84,35 @@ if(!class_exists('MTSFiscalization')) {
 		}
 
 		public static function add_admin_settings() {
-			add_option('mts_fiscalization_organization_email', 'example@example.com');
+			register_setting('mts_fiscalization', 'mts_fiscalization_email');
+			register_setting('mts_fiscalization', 'mts_fiscalization_inn');
+			register_setting('mts_fiscalization', 'mts_fiscalization_address');
+			register_setting('mts_fiscalization', 'mts_fiscalization_tax_system');
 
-			register_setting('mts_fiscalization_options_organization', 'mts-mts_fiscalization_organization_email');
+			add_settings_section(
+				'mts_fiscalization_organization',
+				'Данные об организации',
+				function($args) {
+					?><p id="<?php echo esc_attr( $args['id'] ); ?>">
+						<? esc_html_e( 'Заполняется в соответствии с данными личного кабинета МТС.', 'mts_fiscalization' ); ?>
+					</p><?
+				},
+				PLUGIN_SLUG,
+			);
+
+			add_settings_field(
+				'mts_fiscalization_email',
+				'Email:',
+				function() {
+					?><input type="email"
+						id="mts_fiscalization_email",
+						name="mts_fiscalization_email",
+						value="<? echo get_option('mts_fiscalization_email') ?>"
+					/><?
+				},
+				PLUGIN_SLUG,
+				'mts_fiscalization_organization'
+			);
 		}
 
 		public static function addActionLinks($links) {
