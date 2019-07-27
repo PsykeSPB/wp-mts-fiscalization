@@ -114,6 +114,9 @@ if(!class_exists('MTSFiscalization')) {
 			   $order->add_order_note("Ошибка фискализации:\n$error_message");
 			} else {
 			   $order->add_order_note('Успешно фискализирован');
+			   echo '<pre>';
+			   print_r($response);
+			   echo '</pre>';
 			}
 		}
 
