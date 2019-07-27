@@ -45,14 +45,18 @@ if(!class_exists('MTSFiscalization')) {
 	define('PLUGIN_NAME', 'MTS Fiscalization');
 	define('PLUGIN_SLUG', 'mts_fisc_settings');
 	define('PLUGIN_PATH', plugin_dir_path(__FILE__));
+
 	define('API_ENDPOINT', 'https://ptsv2.com/t/x95pn-1563710775/post');
 
 	class MTSFiscalization {
 		public static function register() {
-			// add event handlers to globall WP hooks
+			// Add event handlers to globall WP hooks
 
 			// Add admin settings page for plugin
 			add_action('admin_menu', array('MTSFiscalization', 'add_admin_menu'));
+
+			// Add settings to admin page
+			add_action('admin_init', array('MTSFiscalization', 'add_admin_settings'));
 
 			// Show order information on the thankyou page
 			// should be used only in dev
@@ -69,7 +73,7 @@ if(!class_exists('MTSFiscalization')) {
 			add_menu_page(
 				PLUGIN_NAME . ' settings',
 				PLUGIN_NAME,
-				'manage_options',
+				'administrator',
 				PLUGIN_SLUG,
 				function() {
 					require_once PLUGIN_PATH . 'assets/admin.php';
@@ -77,6 +81,14 @@ if(!class_exists('MTSFiscalization')) {
 				'dashicons-admin-generic',
 				110
 			);
+		}
+
+		public static function add_admin_settings() {
+			add_option('mts_fiscalization_organization_email', 'example@example.com');
+
+			register_settings('mts_fiscalization_options_organization', 'mts-mts_fiscalization_organization_email', function($input) {
+				return $input;
+			});
 		}
 
 		public static function addActionLinks($links) {
