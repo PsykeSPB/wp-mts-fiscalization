@@ -50,12 +50,27 @@ if(!class_exists('MTSFiscalization')) {
 		public static function register() {
 			// add event handlers to globall WP hooks
 
-			// show order information on the thankyou page
-			// should be used only in dev
-			add_action( 'woocommerce_thankyou', array('MTSFiscalization', 'debug_order'));
+			// Add admin settings page for plugin
+			add_action('admin_menu', array('MTSFiscalization', 'add_admin_menu'));
 
-			// send order info to fiscalization api
-			add_action( 'woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
+			// Show order information on the thankyou page
+			// should be used only in dev
+			add_action('woocommerce_thankyou', array('MTSFiscalization', 'debug_order'));
+
+			// Send order info to fiscalization api
+			add_action('woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
+		}
+
+		public static function add_admin_menu() {
+			add_menu_page(
+				'MTS Fisc Plugin Settings',
+				'MTS Fisc',
+				'manage_options',
+				'mts_fisc_settings',
+				array('MTSFiscalization', 'createAdminPage'),
+				'dashicons-admin-generic',
+				110
+			);
 		}
 
 		public static function debug_order($order_id) {
@@ -125,6 +140,10 @@ if(!class_exists('MTSFiscalization')) {
 			}
 
 			return $fisc;
+		}
+
+		protected static function createAdminPage() {
+
 		}
 	}
 
