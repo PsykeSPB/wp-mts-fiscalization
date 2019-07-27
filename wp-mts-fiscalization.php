@@ -56,7 +56,7 @@ if(!class_exists('MTSFiscalization')) {
 			add_action('admin_menu', array('MTSFiscalization', 'add_admin_menu'));
 
 			// Add settings to admin page
-			add_action('admin_init', array('MTSFiscalization', 'add_admin_settings'));
+			add_action('admin_menu', array('MTSFiscalization', 'add_admin_settings'));
 
 			// Show order information on the thankyou page
 			// should be used only in dev
