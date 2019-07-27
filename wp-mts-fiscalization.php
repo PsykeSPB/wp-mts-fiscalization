@@ -40,7 +40,10 @@ SOFTWARE.
 
 defined('ABSPATH') or die('not allowed');
 
-if(!class_exists('MTSFiscalization')) {
+if (
+	!class_exists('MTSFiscalization')
+	&& in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))
+) {
 
 	define('PLUGIN_NAME', 'MTS Fiscalization');
 	define('PLUGIN_SLUG', 'mts_fisc_settings');
