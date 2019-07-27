@@ -147,18 +147,18 @@ if(!class_exists('MTSFiscalization')) {
 				'payments' => [
 					(object) [
 						'type' => 1,
-						'sum' => number_format( $order->get_total(), 2 ),
+						'sum' => (float) number_format( $order->get_total(), 2 ),
 					],
 				],
-				'total' => number_format( $order->get_total(), 2 ),
+				'total' => (float) number_format( $order->get_total(), 2 ),
 			];
 
 			foreach ($order->get_items() as $item_id => $item_data) {
 				array_push( $fisc->items, (object) [
 					'name' => $item_data->get_name(),
-					'price' => number_format($item_data->get_total() / $item_data->get_quantity(), 2),
+					'price' => (float) number_format($item_data->get_total() / $item_data->get_quantity(), 2),
 					'quantity' => $item_data->get_quantity(),
-					'sum' => number_format( $item_data->get_total(), 2),
+					'sum' => (float) number_format( $item_data->get_total(), 2),
 					'measurement_unit' => 'шт',
 					'payment_method' => 'full_prepayment',
 					'payment_object' => 'service',
