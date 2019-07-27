@@ -84,29 +84,10 @@ if(!class_exists('MTSFiscalization')) {
 		}
 
 		public static function add_admin_settings() {
-			add_settings_section(
-				'mts_fiscalization_organization',
-				'Данные об организации',
-				function($args) {
-					?><p id="<?php echo esc_attr( $args['id'] ); ?>">
-						<? esc_html_e( 'Заполняется в соответствии с данными личного кабинета МТС.', 'mts_fiscalization' ); ?>
-					</p><?
-				},
-				PLUGIN_SLUG,
-			);
-			
+			register_setting('mts_fiscalization', 'mts_fiscalization_email');
 			register_setting('mts_fiscalization', 'mts_fiscalization_inn');
 			register_setting('mts_fiscalization', 'mts_fiscalization_address');
 			register_setting('mts_fiscalization', 'mts_fiscalization_tax_system');
-			
-			register_setting('mts_fiscalization', 'mts_fiscalization_email');
-			add_settings_field('mts_fiscalization_email', 'Email:',	function() {
-					?><input type="email"
-						id="mts_fiscalization_email",
-						name="mts_fiscalization_email",
-						value="<? echo get_option('mts_fiscalization_email') ?>"
-					/><?
-				}, PLUGIN_SLUG,	'mts_fiscalization_organization');
 		}
 
 		public static function addActionLinks($links) {
@@ -150,10 +131,10 @@ if(!class_exists('MTSFiscalization')) {
 					],
 				],
 				'company' => (object) [
-					'email' => '79219417383@litebox.ru', // Var from DB
-					'inn' => '782000336124', // Var from DB
-					'sno' => 'usn_income', // Система налогообложения. Возможные значения: «osn» – общая СН; «usn_income» – упрощенная СН (доходы); «usn_income_outcome» – упрощенная СН (доходы минус расходы); «envd» – единый налог на вмененный доход; «esn» – единый сельскохозяйственный налог; «patent» – патентная СН.
-					'payment_address' => '194291, РОССИЯ, 78, Санкт-Петербург, Культуры, 6, корп. 1', // Var from DB
+					'email' => get_option('mts_fiscalization_email'),
+					'inn' => get_option('mts_fiscalization_inn'),
+					'sno' => get_option('mts_fiscalization_tax_system'),
+					'payment_address' => get_option('mts_fiscalization_address'),
 				],
 				'items' => [],
 				'items_pre' => $order->get_items(),
@@ -176,10 +157,9 @@ if(!class_exists('MTSFiscalization')) {
 					'payment_method' => 'full_prepayment',
 					'payment_object' => 'service',
 					'vat' => (object) [
-						'type' => $item_data->get_tax_class(), // Get from item and reformat
-						'sum' => $item_data->get_total_tax(), // Can get from item?
+						'type' => 'none',
+						'sum' => 0,
 					],
-					'prod' => $item_data->get_product(),
 				]);
 			}
 

@@ -19,7 +19,7 @@
 					<input type="text" 
 						name="mts_fiscalization_inn" 
 						value="<? echo esc_attr( get_option('mts_fiscalization_inn') ); ?>" 
-						pattern="[0-9]{10}"/>
+						pattern="[0-9]{12}"/>
 				</td>
 			</tr>
 
