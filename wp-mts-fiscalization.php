@@ -46,10 +46,10 @@ class MTSFiscPlugin {
 
 		// show order information on the thankyou page
 		// should be used only in dev
-		add_action( 'woocommerce_thankyou', 'debug_order' );
+		add_action( 'woocommerce_thankyou', array($this, 'debug_order'));
 
 		// send order info to fiscalization api
-		add_action( 'woocommerce_order_status_completed', 'send_postback' );
+		add_action( 'woocommerce_order_status_completed', array($this, 'send_postback'));
 	}
 
 	function activate() {
