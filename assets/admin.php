@@ -11,22 +11,28 @@
 						name="mts_fiscalization_email" 
 						value="<? echo esc_attr( get_option('mts_fiscalization_email') ); ?>" />
 				</td>
+			</tr>
 
+			<tr valign="top">
 				<th scope="row">ИНН:</th>
 				<td>
 					<input type="number" 
 						name="mts_fiscalization_inn" 
 						value="<? echo esc_attr( get_option('mts_fiscalization_inn') ); ?>" />
 				</td>
+			</tr>
 
+			<tr valign="top">
 				<th scope="row">Адресс:</th>
 				<td>
 					<input type="text" 
 						name="mts_fiscalization_address" 
 						value="<? echo esc_attr( get_option('mts_fiscalization_address') ); ?>" />
 				</td>
-
-						<th scope="row">Адресс:</th>
+			</tr>
+			
+			<tr valign="top">
+				<th scope="row">Адресс:</th>
 				<td>
 					<select name="mts_fiscalization_address">
 						<option value="osn"	<? echo get_option('mts_fiscalization_tax_system') === 'osn' ? 'selected' : '' ?>>Общая СН</option>
