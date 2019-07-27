@@ -99,6 +99,7 @@ if(!class_exists('MTSFiscalization')) {
 			$order = wc_get_order($order_id);
 			$body = json_encode(MTSFiscalization::getPackagedOrder($order), JSON_UNESCAPED_UNICODE);
 			$body = preg_replace('/"(\d+)\.(\d{2})"/', '$1.$2', $body);
+			$body = preg_replace('/\\\/\\\//', '//', $body);
 
 			echo 'Request:';
 			echo '<pre>';
