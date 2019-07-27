@@ -46,7 +46,8 @@ if(!class_exists('MTSFiscalization')) {
 	define('PLUGIN_SLUG', 'mts_fisc_settings');
 	define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 
-	define('API_ENDPOINT', 'https://in.litebox.ru/fiscalization/v1/shops/43/sell');
+	//define('API_ENDPOINT', 'https://in.litebox.ru/fiscalization/v1/shops/43/sell');
+	define('API_ENDPOINT', 'https://ptsv2.com/t/x95pn-1563710775/post');
 
 	class MTSFiscalization {
 		public static function register() {
