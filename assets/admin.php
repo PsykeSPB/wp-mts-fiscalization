@@ -2,7 +2,7 @@
 	<h2>MTS Fiscalization Настройки</h2>
 	<form method="post" action="options.php">
 		<? settings_fields('mts_fiscalization'); ?>
-		<? do_settings_actions('mts_fiscalization'); ?>
+		<? do_settings_sections('mts_fiscalization'); ?>
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row">Email:</th>
