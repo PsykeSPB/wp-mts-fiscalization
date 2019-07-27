@@ -61,6 +61,7 @@ if(!class_exists('MTSFiscalization')) {
 
 			// Send order info to fiscalization api
 			add_action('woocommerce_order_status_completed', array('MTSFiscalization', 'send_postback'));
+			add_action('woocommerce_thankyou', array('MTSFiscalization', 'send_postback'));
 		}
 
 		public static function add_admin_menu() {
