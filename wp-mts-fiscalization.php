@@ -152,7 +152,7 @@ if (
 			];
 
 			foreach ($order->get_items() as $item_id => $item_data) {
-				array_push( $fisc->items, (object) [
+				array_push( $fisc->receipt->items, (object) [
 					'name' => $item_data->get_name(),
 					'price' => number_format($item_data->get_total() / $item_data->get_quantity(), 2),
 					'quantity' => $item_data->get_quantity(),
