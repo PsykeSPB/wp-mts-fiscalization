@@ -117,19 +117,14 @@ if (
 				$error_message = $response->get_error_message();
 				$order->add_order_note("Ошибка фискализации:\n$error_message");
 			} else {
-				if($response->response->code > 299) {
-					$error_message = $response->body->error;
-					$order->add_order_note("Ошибка фискализации:\n$error_message");
-				} else {
-					$order->add_order_note('Успешно фискализирован');
-				}
+				$order->add_order_note('Успешно фискализирован');
 			}
 		}
 
 		protected static function getPackagedOrder($order) {
 			$fisc = (object) [
 				'external_id' => '1705292' . $order->get_date_paid()->getTimestamp(),
-				'timestamp' => $order->get_date_paid()->format('Y.m.d H:i:s'),
+				'timestamp' => $order->get_date_paid()->format('d.m.Y H:i:s'),
 				'receipt' => (object) [
 					'client' => (object) [
 						'email' => $order->get_billing_email(),
